@@ -1,0 +1,58 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1920px;
+}
+
+#playerArea,
+#deck {
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.playerCards {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px 0;
+    width: 40%;
+    height: auto;
+}
+
+.playerDeck {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px 0;
+    width: 40%;
+    height: auto;
+}
+
+.button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+
+    margin: 10px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
+
+.playerCards {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+
+    grid-template-rows: 1fr 1fr;
+}
+
+#player1Cards .cardList h4 {
+    color: red;
+}
+
+#player2Cards .cardList h4 {
+    color: blue;
+}
