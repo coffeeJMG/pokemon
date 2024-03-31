@@ -49,10 +49,10 @@ body {
     grid-template-rows: 1fr 1fr;
 }
 
-#player1Cards .cardList h4 {
+#player1Cards div h4 {
     color: red;
 }
 
-#player2Cards .cardList h4 {
+#player2Cards div h4 {
     color: blue;
 }

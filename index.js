@@ -1,4 +1,4 @@
-let pocketmonArray = [
+let pockemonArray = [
     // 꼬부기
     {
         name: "Squirtle",
@@ -89,7 +89,7 @@ let pocketmonArray = [
 
     // 캐터피
     {
-        name: "PikachCaterpie",
+        name: "Caterpie",
         element: "grass",
         hp: "45",
         attack: "30",
@@ -127,5 +127,60 @@ class Game {
     constructor(turn, gameOver) {
         this.turn = turn;
         this.gameOver = gameOver;
+    }
+}
+
+class CardList {
+    constructor(selector) {
+        this.cards = [];
+        this.subscribers = []; // 구독자 목록
+        this.selector = selector; // UI 업데이트 대상의 선택자
+    }
+
+    // 카드 추가
+    addCard(card) {
+        this.cards.push(card);
+        this.notifySubscribers(); // 구독자에게 변화를 알림
+    }
+
+    // 카드 제거
+    removeCard(cardName) {
+        this.cards = this.cards.filter((card) => card.name !== cardName);
+        this.notifySubscribers(); // 구독자에게 변화를 알림
+    }
+
+    // 구독자 추가
+    subscribe(callback) {
+        this.subscribers.push(callback);
+    }
+
+    // 모든 구독자에게 변경 사항 알림
+    notifySubscribers() {
+        this.subscribers.forEach((callback) => callback(this.cards));
+    }
+
+    updateUI() {
+        const deckElement = document.querySelector(this.selector);
+        deckElement.innerHTML = ""; // 기존 내용을 비움
+
+        this.cards.forEach((card) => {
+            const cardElement = document.createElement("div");
+            cardElement.innerHTML = `
+            <h4>${card.name}</h4>
+            <p>Element: ${card.element}</p>
+            <p>HP: ${card.hp}</p>
+            <p>Attack: ${card.attack}</p>
+            <p>Shield: ${card.shield}</p>
+            <p>Speed: ${card.speed}</p>
+            `;
+
+            // 카드 이름에 클릭 이벤트 리스너 추가
+            const cardNameElement = cardElement.querySelector("h4");
+            cardNameElement.addEventListener("click", () => {
+                console.log(card.name);
+            });
+
+            deckElement.appendChild(cardElement);
+        });
     }
 }
