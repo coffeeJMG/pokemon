@@ -12,7 +12,7 @@ body {
     justify-content: space-between;
 }
 
-.playerCards {
+.playerCards, .player1Board, .player2Board {
     border: 1px solid #ccc;
     padding: 10px;
     margin: 10px 0;
@@ -20,13 +20,7 @@ body {
     height: auto;
 }
 
-.playerDeck {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin: 10px 0;
-    width: 40%;
-    height: auto;
-}
+
 
 .button {
     background-color: #007bff;
