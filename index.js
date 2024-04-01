@@ -181,19 +181,32 @@ class CardList {
             const cardNameElement = cardElement.querySelector("h4");
             cardNameElement.addEventListener("click", (e) => {
 
-                let findPlayer = e.target.parentElement.parentElement.id
-                // console.log(card.name);
-                // console.log(this.selector)
-                // console.log(e.target.parentElement.parentElement)
-
-               
+                
+   
                 cardDeck.removeCard(card.name)
                 cardDeck.updateUI(cardDeck.cards, cardDeck);
                 
+                console.log(cardDeck.selector)    
+                
+                if(cardDeck.selector ==="#player1Cards"){
 
-                console.log(cardList,cardDeck)
+                    
+                    redDeck.addCard(card)
 
-                console.log(findPlayer)
+                    console.log(redDeck)
+                    redDeck.updateUI(redDeck.cards,redDeck)
+                }
+
+                if(cardDeck.selector ==="#player2Cards"){
+
+                    
+                    blueDeck.addCard(card)
+
+                    console.log(blueDeck)
+                    blueDeck.updateUI(blueDeck.cards,blueDeck)
+                }
+                
+            
             });
 
             deckElement.appendChild(cardElement);

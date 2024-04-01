@@ -23,26 +23,6 @@ function assignPokemonCards(cardList, pockemonArray, count) {
     }
 }
 
-// function updateUI(playerDeck, deckElementId) {
-//     const deckElement = document.querySelector(deckElementId);
-//     deckElement.innerHTML = ""; // 기존 덱 UI 내용을 비웁니다.
-
-//     // 덱에 있는 모든 카드를 순회하며 UI를 업데이트합니다.
-//     playerDeck.cards.forEach((card) => {
-//         let cardElement = document.createElement("div");
-//         cardElement.className = "card";
-//         cardElement.innerHTML = `
-//         <h4>${card.name}</h4>
-//         <p>Element: ${card.element}</p>
-//         <p>HP: ${card.hp}</p>
-//         <p>Attack: ${card.attack}</p>
-//         <p>Shield: ${card.shield}</p>
-//         <p>Speed: ${card.speed}</p>
-
-//         `;
-//         deckElement.appendChild(cardElement); // 새로운 카드 요소를 덱에 추가합니다.
-//     });
-// }
 
 function SelectPockemon(selectedCard, playerCards, targetDeck) {
     playerCards.cards.forEach((card) => {
