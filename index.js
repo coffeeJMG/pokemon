@@ -154,12 +154,15 @@ class CardList {
         this.subscribers.push(callback);
     }
 
+    lookupSubscribers() {
+        console.log("현재 구독자 조회:", this.subscribers);
+    }
     // 모든 구독자에게 변경 사항 알림
     notifySubscribers() {
         this.subscribers.forEach((callback) => callback(this.cards));
     }
 
-    updateUI() {
+    updateUI(cardList, cardDeck) {
         const deckElement = document.querySelector(this.selector);
         deckElement.innerHTML = ""; // 기존 내용을 비움
 
@@ -176,8 +179,21 @@ class CardList {
 
             // 카드 이름에 클릭 이벤트 리스너 추가
             const cardNameElement = cardElement.querySelector("h4");
-            cardNameElement.addEventListener("click", () => {
-                console.log(card.name);
+            cardNameElement.addEventListener("click", (e) => {
+
+                let findPlayer = e.target.parentElement.parentElement.id
+                // console.log(card.name);
+                // console.log(this.selector)
+                // console.log(e.target.parentElement.parentElement)
+
+               
+                cardDeck.removeCard(card.name)
+                cardDeck.updateUI(cardDeck.cards, cardDeck);
+                
+
+                console.log(cardList,cardDeck)
+
+                console.log(findPlayer)
             });
 
             deckElement.appendChild(cardElement);
