@@ -8,22 +8,34 @@
     </head>
     <body>
         <h2>켘ㅋ켘켘케케</h2>
+        <h2 id="turnDiv"></h2>
         <div id="gameStart" class="button">게임 시작</div>
         <div id="playerArea">
             <div id="player1Cards" class="playerCards"></div>
             <div id="player2Cards" class="playerCards"></div>
         </div>
         <div id="deck">
-            <div id="player1Deck" class="playerDeck"></div>
-            <div id="player2Deck" class="playerDeck"></div>
+            <div class="player1Board">
+            <div id="player1Deck" class="playerDeck">
+                
+            </div>
+            <div id="actions">
+                <div class="button" id="attack">공격</div>
+                <div class="button" id="defend">방어</div>
+            </div>
+            </div>
+            <div class="player2Board">
+            <div id="player2Deck" class="playerDeck">
+            </div>
+            <div id="actions">
+                <div class="button" id="attack">공격</div>
+                <div class="button" id="defend">방어</div>
+            </div>
+            </div>
         </div>
-        <div id="actions">
-            <div class="button" id="attack">공격</div>
-            <div class="button" id="defend">방어</div>
-        </div>
+       
 
         <script src="index.js"></script>
         <script src="gameStart.js"></script>
-        <script src="choosePoketmon.js"></script>
     </body>
 </html>
