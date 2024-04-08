@@ -123,13 +123,6 @@ class Deck {
     }
 }
 
-class Game {
-    constructor(turn, gameOver) {
-        this.turn = turn;
-        this.gameOver = gameOver;
-    }
-}
-
 class CardList {
     constructor(selector) {
         this.cards = [];
@@ -180,33 +173,24 @@ class CardList {
             // 카드 이름에 클릭 이벤트 리스너 추가
             const cardNameElement = cardElement.querySelector("h4");
             cardNameElement.addEventListener("click", (e) => {
-
-                
-   
-                cardDeck.removeCard(card.name)
+                cardDeck.removeCard(card.name);
                 cardDeck.updateUI(cardDeck.cards, cardDeck);
-                
-                console.log(cardDeck.selector)    
-                
-                if(cardDeck.selector ==="#player1Cards"){
 
-                    
-                    redDeck.addCard(card)
+                console.log(cardDeck.selector);
 
-                    console.log(redDeck)
-                    redDeck.updateUI(redDeck.cards,redDeck)
+                if (cardDeck.selector === "#player1Cards") {
+                    redDeck.addCard(card);
+
+                    console.log(redDeck);
+                    redDeck.updateUI(redDeck.cards, redDeck);
                 }
 
-                if(cardDeck.selector ==="#player2Cards"){
+                if (cardDeck.selector === "#player2Cards") {
+                    blueDeck.addCard(card);
 
-                    
-                    blueDeck.addCard(card)
-
-                    console.log(blueDeck)
-                    blueDeck.updateUI(blueDeck.cards,blueDeck)
+                    console.log(blueDeck);
+                    blueDeck.updateUI(blueDeck.cards, blueDeck);
                 }
-                
-            
             });
 
             deckElement.appendChild(cardElement);
