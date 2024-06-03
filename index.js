@@ -110,10 +110,11 @@ class Card {
 }
 
 class Player {
-    constructor(name, hp, cards) {
+    constructor(name, hp, cards, action) {
         this.name = name;
         this.hp = hp;
         this.cards = cards;
+        this.action = action;
     }
 }
 
@@ -150,6 +151,7 @@ class CardList {
     lookupSubscribers() {
         console.log("현재 구독자 조회:", this.subscribers);
     }
+
     // 모든 구독자에게 변경 사항 알림
     notifySubscribers() {
         this.subscribers.forEach((callback) => callback(this.cards));
@@ -173,24 +175,29 @@ class CardList {
             // 카드 이름에 클릭 이벤트 리스너 추가
             const cardNameElement = cardElement.querySelector("h4");
             cardNameElement.addEventListener("click", (e) => {
-                cardDeck.removeCard(card.name);
-                cardDeck.updateUI(cardDeck.cards, cardDeck);
-
-                console.log(cardDeck.selector);
-
+                // 플레이어1의 카드인 경우
                 if (cardDeck.selector === "#player1Cards") {
+                    if (redDeck.cards.length > 0) {
+                        alert("이미 포켓몬이 있습니다.");
+                        return;
+                    }
+                    cardDeck.removeCard(card.name);
                     redDeck.addCard(card);
-
-                    console.log(redDeck);
                     redDeck.updateUI(redDeck.cards, redDeck);
                 }
 
+                // 플레이어2의 카드인 경우
                 if (cardDeck.selector === "#player2Cards") {
+                    if (blueDeck.cards.length > 0) {
+                        alert("이미 포켓몬이 있습니다.");
+                        return;
+                    }
+                    cardDeck.removeCard(card.name);
                     blueDeck.addCard(card);
-
-                    console.log(blueDeck);
                     blueDeck.updateUI(blueDeck.cards, blueDeck);
                 }
+
+                cardDeck.updateUI(cardDeck.cards, cardDeck);
             });
 
             deckElement.appendChild(cardElement);
