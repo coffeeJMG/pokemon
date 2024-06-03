@@ -1,5 +1,5 @@
-let jiwooCards = new CardList("#player1Cards");
-let woong2Cards = new CardList("#player2Cards");
+let player1 = new CardList("#player1Cards");
+let player2 = new CardList("#player2Cards");
 let redDeck = new CardList("#player1Deck");
 let blueDeck = new CardList("#player2Deck");
 
@@ -39,16 +39,16 @@ function gameStart() {
     // 초기 카드 할당 로직
     startBtn.style.display = "none";
 
-    assignPokemonCards(jiwooCards, pockemonArray, 5);
-    assignPokemonCards(woong2Cards, pockemonArray, 5);
+    assignPokemonCards(player1, pockemonArray, 5);
+    assignPokemonCards(player2, pockemonArray, 5);
 
     // 카드 목록 변화에 따른 UI 업데이트 구독
-    jiwooCards.subscribe(() => jiwooCards.updateUI());
-    woong2Cards.subscribe(() => woong2Cards.updateUI());
+    player1.subscribe(() => player1.updateUI());
+    player2.subscribe(() => player2.updateUI());
 
     // 초기 UI 업데이트
-    jiwooCards.updateUI(jiwooCards.cards, jiwooCards);
-    woong2Cards.updateUI(woong2Cards.cards, woong2Cards);
+    player1.updateUI(player1.cards, player1);
+    player2.updateUI(player2.cards, player2);
 }
 
 document.getElementById("gameStart").addEventListener("click", gameStart);
