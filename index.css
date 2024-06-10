@@ -5,14 +5,26 @@ body {
     max-width: 1920px;
 }
 
-#playerArea,
-#deck {
+#playerArea {
     width: 80%;
     display: flex;
     justify-content: space-between;
 }
 
-.playerCards, .player1Board, .player2Board {
+#deck {
+    width: 80%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; /* 각 행을 자동 높이로 설정 */
+    gap: 10px; /* 요소 간의 간격 조정, 필요에 따라 변경 */
+}
+
+.player1Board,
+.battleField,
+.player2Board {
+    margin: auto; /* 요소를 가운데 정렬 */
+}
+
+.playerCards {
     border: 1px solid #ccc;
     padding: 10px;
     margin: 10px 0;
@@ -20,7 +32,15 @@ body {
     height: auto;
 }
 
-
+.battleField,
+.player1Board,
+.player2Board {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px auto;
+    width: 90%;
+    height: auto;
+}
 
 .button {
     background-color: #007bff;
