@@ -68,6 +68,7 @@ function gameStart() {
 }
 
 // player 의 액션을 받는 코드
+
 function handlePlayerAction(playerId, actionType) {
     if (playerId === "player1") {
         if (redDeck.cards.length === 0) {
@@ -79,6 +80,9 @@ function handlePlayerAction(playerId, actionType) {
         } else {
             currentTurn.setPlayer1Action(actionType);
             player1.action = true;
+            document.querySelector(
+                "#player1Stat",
+            ).innerText = `Player 1: ${actionType}`;
             console.log("Player 1 Action: ", currentTurn.player1Action);
         }
     } else if (playerId === "player2") {
@@ -91,7 +95,39 @@ function handlePlayerAction(playerId, actionType) {
         } else {
             currentTurn.setPlayer2Action(actionType);
             player2.action = true;
+            document.querySelector(
+                "#player2Stat",
+            ).innerText = `Player 2: ${actionType}`;
             console.log("Player 2 Action: ", currentTurn.player2Action);
         }
     }
+
+    // 확인 버튼을 표시할지 결정
+    if (player1.action && player2.action) {
+        document.querySelector("#confirmTurn").style.display = "block";
+    }
+}
+
+function endTurn() {
+    if (player1.action && player2.action) {
+        currentTurn.turn++;
+        player1.action = false;
+        player2.action = false;
+
+        // 턴 종료 후 초기화 및 UI 업데이트
+        updateTurnDisplay();
+        document.querySelector("#player1Stat").innerText =
+            "Please, choose action";
+        document.querySelector("#player2Stat").innerText =
+            "Please, choose action";
+        document.querySelector("#confirmTurn").style.display = "none";
+    } else {
+        alert("모든 플레이어가 행동을 선택해야 합니다.");
+    }
+}
+
+function updateTurnDisplay() {
+    document.querySelector(
+        "#turnDisplay",
+    ).innerText = `Turn ${currentTurn.turn}`;
 }
