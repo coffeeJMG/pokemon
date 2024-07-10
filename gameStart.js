@@ -43,6 +43,8 @@ function assignPokemonCards(cardList, pockemonArray, count) {
         cardList.addCard(card);
         pockemonArray.splice(randomIndex, 1);
     }
+
+    console.log("포켓몬을 할당 했습니다.");
 }
 
 function gameStart() {
@@ -52,11 +54,15 @@ function gameStart() {
     let player1Cards = new CardList("#player1Cards");
     let player2Cards = new CardList("#player2Cards");
 
+    console.log("player1, player2 의 카드리스트를 생성했습니다.");
+
     assignPokemonCards(player1Cards, pockemonArray, 5);
     assignPokemonCards(player2Cards, pockemonArray, 5);
 
     player1 = new Player("Player 1", 100, player1Cards, false);
     player2 = new Player("Player 2", 100, player2Cards, false);
+
+    console.log("player1, player2 를 생성했습니다.");
 
     // 카드 목록 변화에 따른 UI 업데이트 구독
     player1.cards.subscribe(() => player1.cards.updateUI());
@@ -65,6 +71,8 @@ function gameStart() {
     // 초기 UI 업데이트
     player1.cards.updateUI(player1.cards.cards, player1.cards);
     player2.cards.updateUI(player2.cards.cards, player2.cards);
+
+    console.log("카드 리스트 UI 생성");
 }
 
 // player 의 액션을 받는 코드
@@ -108,6 +116,46 @@ function handlePlayerAction(playerId, actionType) {
     }
 }
 
+function resolveTurn() {
+    const player1Card = redDeck.cards[0]; // 플레이어1의 카드 (첫 번째 카드)
+    const player2Card = blueDeck.cards[0]; // 플레이어2의 카드 (첫 번째 카드)
+
+    console.log(player1Card);
+    console.log(player2Card);
+
+    let player1Score = 0;
+    let player2Score = 0;
+
+    // Player 1의 액션이 attack인 경우
+    if (currentTurn.player1Action === "attack") {
+        player1Score = player1Card.attack;
+    } else if (currentTurn.player1Action === "shield") {
+        player1Score = player1Card.shield;
+    }
+
+    // Player 2의 액션이 attack인 경우
+    if (currentTurn.player2Action === "attack") {
+        player2Score = player2Card.attack;
+    } else if (currentTurn.player2Action === "shield") {
+        player2Score = player2Card.shield;
+    }
+
+    // 결과 비교 및 출력
+    let resultMessage;
+    if (player1Score > player2Score) {
+        resultMessage = "Player 1 wins this turn!";
+    } else if (player1Score < player2Score) {
+        resultMessage = "Player 2 wins this turn!";
+    } else {
+        resultMessage = "This turn is a draw!";
+    }
+
+    alert(resultMessage);
+
+    // 턴 종료 후 초기화
+    endTurn();
+}
+
 function endTurn() {
     if (player1.action && player2.action) {
         currentTurn.turn++;
@@ -131,3 +179,5 @@ function updateTurnDisplay() {
         "#turnDisplay",
     ).innerText = `Turn ${currentTurn.turn}`;
 }
+
+document.querySelector("#confirmTurn").addEventListener("click", resolveTurn);

@@ -184,6 +184,9 @@ class CardList {
                     cardDeck.removeCard(card.name);
                     redDeck.addCard(card);
                     redDeck.updateUI(redDeck.cards, redDeck);
+                    console.log(
+                        `${cardDeck.selector} 의 ${card.name} 을 덱에 올렸습니다.`,
+                    );
                 }
 
                 // 플레이어2의 카드인 경우
@@ -195,6 +198,9 @@ class CardList {
                     cardDeck.removeCard(card.name);
                     blueDeck.addCard(card);
                     blueDeck.updateUI(blueDeck.cards, blueDeck);
+                    console.log(
+                        `${cardDeck.selector} 의 ${card.name} 을 덱에 올렸습니다.`,
+                    );
                 }
 
                 cardDeck.updateUI(cardDeck.cards, cardDeck);
