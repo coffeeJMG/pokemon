@@ -147,6 +147,7 @@ function resolveTurn() {
     let player2Speed = player2Pokemon.speed;
     let player2PokemonHp = parseInt(player2Pokemon.hp, 10);
 
+    let playerDamage = 0;
     let resultMessage = "";
 
     console.log(player1PokemonHp, player2PokemonHp);
@@ -158,38 +159,43 @@ function resolveTurn() {
     ) {
         if (player1Speed > player2Speed) {
             console.log("player1 선제공격");
+
+            playerDamage = player1Attack - player2PokemonHp;
             player2PokemonHp -= player1Attack;
 
             if (player2PokemonHp <= 0) {
                 console.log("player2 포켓몬 사망");
                 resultMessage += "Player 2's 포켓몬 사망 ";
-                player2.hp -= player1Attack; // 플레이어 2의 HP 감소
+                player2.hp -= playerDamage; // 플레이어 2의 HP 감소
             } else {
                 console.log("player2 후공");
+                playerDamage = player2Attack - player1PokemonHp;
                 player1PokemonHp -= player2Attack;
 
                 if (player1PokemonHp <= 0) {
                     console.log("player1 포켓몬 사망");
                     resultMessage += "Player 1's 포켓몬 사망 ";
-                    player1.hp -= player2Attack; // 플레이어 1의 HP 감소
+                    player1.hp -= playerDamage; // 플레이어 1의 HP 감소
                 }
             }
         } else {
             console.log("player2 선제공격");
+            playerDamage = player2Attack - player1PokemonHp;
             player1PokemonHp -= player2Attack;
 
             if (player1PokemonHp <= 0) {
                 console.log("player1 포켓몬 사망");
                 resultMessage += "Player 1's 포켓몬 사망 ";
-                player1.hp -= player2Attack; // 플레이어 1의 HP 감소
+                player1.hp -= playerDamage; // 플레이어 1의 HP 감소
             } else {
                 console.log("player1 후공");
+                playerDamage = player1Attack - player2PokemonHp;
                 player2PokemonHp -= player1Attack;
 
                 if (player2PokemonHp <= 0) {
                     console.log("player2 포켓몬 사망");
                     resultMessage += "Player 2's 포켓몬 사망 ";
-                    player2.hp = player1Attack; // 플레이어 2의 HP 감소
+                    player2.hp = playerDamage; // 플레이어 2의 HP 감소
                 }
             }
         }
@@ -207,10 +213,10 @@ function resolveTurn() {
     alert(resultMessage);
 
     // HP가 0 이하인 포켓몬을 덱에서 제거
-    if (player1Hp <= 0) {
+    if (player1Pokemon <= 0) {
         redDeck.removeCard(player1Pokemon.name);
     }
-    if (player2Hp <= 0) {
+    if (player2PokemonHp <= 0) {
         blueDeck.removeCard(player2Pokemon.name);
     }
 
