@@ -1,5 +1,3 @@
-// index.js
-
 // Turn 클래스 정의
 class Turn {
     constructor(turn, player1Action, player2Action) {
@@ -21,11 +19,26 @@ let currentTurn = new Turn(1, null, null);
 
 let player1;
 let player2;
-let redDeck = new CardList("#player1Deck");
-let blueDeck = new CardList("#player2Deck");
+let redDeck;
+let blueDeck;
+let startBtn;
+let turnDiv;
+let player1hp;
+let player2hp;
 
-let startBtn = document.querySelector("#gameStart");
-let turnDiv = document.querySelector("#turnDiv");
+document.addEventListener("DOMContentLoaded", function () {
+    startBtn = document.querySelector("#gameStart");
+    turnDiv = document.querySelector("#turnDiv");
+    player1hp = document.querySelector("#player1Hp");
+    player2hp = document.querySelector("#player2Hp");
+
+    redDeck = new CardList("#player1Deck");
+    blueDeck = new CardList("#player2Deck");
+
+    document
+        .querySelector("#confirmTurn")
+        .addEventListener("click", resolveTurn);
+});
 
 function assignPokemonCards(cardList, pockemonArray, count) {
     for (let i = 0; i < count; i++) {
@@ -72,11 +85,15 @@ function gameStart() {
     player1.cards.updateUI(player1.cards.cards, player1.cards);
     player2.cards.updateUI(player2.cards.cards, player2.cards);
 
+    console.log(player1.hp);
+
+    player1hp.innerHTML = `Player 1 HP: ${player1.hp}`;
+    player2hp.innerHTML = `Player 2 HP: ${player2.hp}`;
+
     console.log("카드 리스트 UI 생성");
 }
 
 // player 의 액션을 받는 코드
-
 function handlePlayerAction(playerId, actionType) {
     if (playerId === "player1") {
         if (redDeck.cards.length === 0) {
@@ -117,59 +134,115 @@ function handlePlayerAction(playerId, actionType) {
 }
 
 function resolveTurn() {
-    const player1Card = redDeck.cards[0]; // 플레이어1의 카드 (첫 번째 카드)
-    const player2Card = blueDeck.cards[0]; // 플레이어2의 카드 (첫 번째 카드)
+    const player1Pokemon = redDeck.cards[0]; // 플레이어1의 카드 (첫 번째 카드)
+    const player2Pokemon = blueDeck.cards[0]; // 플레이어2의 카드 (첫 번째 카드)
 
-    console.log(player1Card);
-    console.log(player2Card);
+    console.log(player1Pokemon);
+    console.log(player2Pokemon);
 
-    let player1Score = 0;
-    let player2Score = 0;
+    let player1Attack = player1Pokemon.attack;
+    let player1Speed = player1Pokemon.speed;
+    let player1PokemonHp = parseInt(player1Pokemon.hp, 10);
+    let player2Attack = player2Pokemon.attack;
+    let player2Speed = player2Pokemon.speed;
+    let player2PokemonHp = parseInt(player2Pokemon.hp, 10);
+
+    let resultMessage = "";
+
+    console.log(player1PokemonHp, player2PokemonHp);
 
     // Player 1의 액션이 attack인 경우
-    if (currentTurn.player1Action === "attack") {
-        player1Score = player1Card.attack;
-    } else if (currentTurn.player1Action === "shield") {
-        player1Score = player1Card.shield;
+    if (
+        currentTurn.player1Action === "attack" &&
+        currentTurn.player2Action === "attack"
+    ) {
+        if (player1Speed > player2Speed) {
+            console.log("player1 선제공격");
+            player2PokemonHp -= player1Attack;
+
+            if (player2PokemonHp <= 0) {
+                console.log("player2 포켓몬 사망");
+                resultMessage += "Player 2's 포켓몬 사망 ";
+                player2.hp -= player1Attack; // 플레이어 2의 HP 감소
+            } else {
+                console.log("player2 후공");
+                player1PokemonHp -= player2Attack;
+
+                if (player1PokemonHp <= 0) {
+                    console.log("player1 포켓몬 사망");
+                    resultMessage += "Player 1's 포켓몬 사망 ";
+                    player1.hp -= player2Attack; // 플레이어 1의 HP 감소
+                }
+            }
+        } else {
+            console.log("player2 선제공격");
+            player1PokemonHp -= player2Attack;
+
+            if (player1PokemonHp <= 0) {
+                console.log("player1 포켓몬 사망");
+                resultMessage += "Player 1's 포켓몬 사망 ";
+                player1.hp -= player2Attack; // 플레이어 1의 HP 감소
+            } else {
+                console.log("player1 후공");
+                player2PokemonHp -= player1Attack;
+
+                if (player2PokemonHp <= 0) {
+                    console.log("player2 포켓몬 사망");
+                    resultMessage += "Player 2's 포켓몬 사망 ";
+                    player2.hp = player1Attack; // 플레이어 2의 HP 감소
+                }
+            }
+        }
     }
 
-    // Player 2의 액션이 attack인 경우
-    if (currentTurn.player2Action === "attack") {
-        player2Score = player2Card.attack;
-    } else if (currentTurn.player2Action === "shield") {
-        player2Score = player2Card.shield;
-    }
+    player1Pokemon.hp = player1PokemonHp.toString();
+    player2Pokemon.hp = player2PokemonHp.toString();
 
-    // 결과 비교 및 출력
-    let resultMessage;
-    if (player1Score > player2Score) {
-        resultMessage = "Player 1 wins this turn!";
-    } else if (player1Score < player2Score) {
-        resultMessage = "Player 2 wins this turn!";
-    } else {
-        resultMessage = "This turn is a draw!";
-    }
+    // Update player HP display
+    player1hp.innerHTML = `Player 1 HP: ${player1.hp}`;
+    player2hp.innerHTML = `Player 2 HP: ${player2.hp}`;
+
+    console.log(player1Hp, player2Hp);
 
     alert(resultMessage);
 
+    // HP가 0 이하인 포켓몬을 덱에서 제거
+    if (player1Hp <= 0) {
+        redDeck.removeCard(player1Pokemon.name);
+    }
+    if (player2Hp <= 0) {
+        blueDeck.removeCard(player2Pokemon.name);
+    }
+
+    // 플레이어의 HP가 0 이하일 경우 게임 종료
+    if (player1.hp <= 0) {
+        alert("Player 2 승리!");
+        console.log("Player 2 승리!");
+        return;
+    }
+    if (player2.hp <= 0) {
+        alert("Player 1 승리!");
+        console.log("Player 1 승리!");
+        return;
+    }
+
     // 턴 종료 후 초기화
-    endTurn();
+    currentTurn.turn++;
+    player1.action = false;
+    player2.action = false;
+
+    updateTurnDisplay();
+    document.querySelector("#player1Stat").innerText = "Please, choose action";
+    document.querySelector("#player2Stat").innerText = "Please, choose action";
+    document.querySelector("#confirmTurn").style.display = "none";
+
+    // 덱 UI 업데이트
+    redDeck.updateUI(redDeck.cards, redDeck);
+    blueDeck.updateUI(blueDeck.cards, blueDeck);
 }
 
 function endTurn() {
-    if (player1.action && player2.action) {
-        currentTurn.turn++;
-        player1.action = false;
-        player2.action = false;
-
-        // 턴 종료 후 초기화 및 UI 업데이트
-        updateTurnDisplay();
-        document.querySelector("#player1Stat").innerText =
-            "Please, choose action";
-        document.querySelector("#player2Stat").innerText =
-            "Please, choose action";
-        document.querySelector("#confirmTurn").style.display = "none";
-    } else {
+    if (!player1.action && !player2.action) {
         alert("모든 플레이어가 행동을 선택해야 합니다.");
     }
 }
@@ -179,5 +252,3 @@ function updateTurnDisplay() {
         "#turnDisplay",
     ).innerText = `Turn ${currentTurn.turn}`;
 }
-
-document.querySelector("#confirmTurn").addEventListener("click", resolveTurn);
