@@ -134,25 +134,23 @@ function handlePlayerAction(playerId, actionType) {
 }
 
 function resolveTurn() {
-    const player1Pokemon = redDeck.cards[0]; // 플레이어1의 카드 (첫 번째 카드)
-    const player2Pokemon = blueDeck.cards[0]; // 플레이어2의 카드 (첫 번째 카드)
-
-    console.log(player1Pokemon);
-    console.log(player2Pokemon);
+    const player1Pokemon = redDeck.cards[0]; // 플레이어1의 카드
+    const player2Pokemon = blueDeck.cards[0]; // 플레이어2의 카드
 
     let player1Attack = player1Pokemon.attack;
     let player1Speed = player1Pokemon.speed;
+    let player1Shield = player1Pokemon.shield;
     let player1PokemonHp = parseInt(player1Pokemon.hp, 10);
     let player2Attack = player2Pokemon.attack;
     let player2Speed = player2Pokemon.speed;
+    let player2Shield = player2Pokemon.shield;
     let player2PokemonHp = parseInt(player2Pokemon.hp, 10);
 
     let playerDamage = 0;
+    let damage = 0;
     let resultMessage = "";
 
-    console.log(player1PokemonHp, player2PokemonHp);
-
-    // Player 1의 액션이 attack인 경우
+    // Player 1,2의 액션이 attack인 경우
     if (
         currentTurn.player1Action === "attack" &&
         currentTurn.player2Action === "attack"
@@ -160,63 +158,117 @@ function resolveTurn() {
         if (player1Speed > player2Speed) {
             console.log("player1 선제공격");
 
-            playerDamage = player1Attack - player2PokemonHp;
+            damage = player1Attack - player2PokemonHp;
             player2PokemonHp -= player1Attack;
 
             if (player2PokemonHp <= 0) {
                 console.log("player2 포켓몬 사망");
                 resultMessage += "Player 2's 포켓몬 사망 ";
-                player2.hp -= playerDamage; // 플레이어 2의 HP 감소
+                player2.hp -= damage; // 플레이어 2의 HP 감소
             } else {
                 console.log("player2 후공");
-                playerDamage = player2Attack - player1PokemonHp;
+                damage = player2Attack - player1PokemonHp;
                 player1PokemonHp -= player2Attack;
 
                 if (player1PokemonHp <= 0) {
                     console.log("player1 포켓몬 사망");
                     resultMessage += "Player 1's 포켓몬 사망 ";
-                    player1.hp -= playerDamage; // 플레이어 1의 HP 감소
+                    player1.hp -= damage; // 플레이어 1의 HP 감소
                 }
             }
         } else {
             console.log("player2 선제공격");
-            playerDamage = player2Attack - player1PokemonHp;
+            damage = player2Attack - player1PokemonHp;
             player1PokemonHp -= player2Attack;
 
             if (player1PokemonHp <= 0) {
                 console.log("player1 포켓몬 사망");
                 resultMessage += "Player 1's 포켓몬 사망 ";
-                player1.hp -= playerDamage; // 플레이어 1의 HP 감소
+                player1.hp -= damage; // 플레이어 1의 HP 감소
             } else {
                 console.log("player1 후공");
-                playerDamage = player1Attack - player2PokemonHp;
+                damage = player1Attack - player2PokemonHp;
                 player2PokemonHp -= player1Attack;
 
                 if (player2PokemonHp <= 0) {
                     console.log("player2 포켓몬 사망");
                     resultMessage += "Player 2's 포켓몬 사망 ";
-                    player2.hp = playerDamage; // 플레이어 2의 HP 감소
+                    player2.hp = damage; // 플레이어 2의 HP 감소
                 }
             }
+        }
+    }
+
+    // player2의 액션이 shield인 경우
+    if (
+        currentTurn.player1Action === "attack" &&
+        currentTurn.player2Action === "shield"
+    ) {
+        damage = player1Attack - player2Shield;
+
+        if (damage > 0) {
+            player2PokemonHp -= damage;
+
+            if (player2PokemonHp <= 0) {
+                playerDamage = player2Pokemon.hp - damage;
+                player2.hp -= playerDamage; // 플레이어 2의 HP 감소
+                console.log(`player2의 데미지는 ${damage} 입니다.`);
+                resultMessage += `player2의 데미지는 ${damage} 입니다.`;
+            } else {
+                console.log(
+                    `${player2Pokemon.name}의 데미지는 ${damage} 입니다.`,
+                );
+                resultMessage += `${player2Pokemon.name}의 데미지는 ${damage} 입니다.`;
+            }
+        } else {
+            console.log("player2의 방어력이 높아 데미지가 0 입니다.");
+            resultMessage += "player2의 방어력이 높아 데미지가 0 입니다.";
+        }
+    }
+
+    // player 1의 액션이 shield인 경우
+    if (
+        currentTurn.player1Action === "shield" &&
+        currentTurn.player2Action === "attack"
+    ) {
+        damage = player2Attack - player1Shield;
+
+        if (damage > 0) {
+            player1PokemonHp -= damage;
+
+            if (player1PokemonHp <= 0) {
+                playerDamage = player1Pokemon.hp - damage;
+                player1.hp -= playerDamage; // 플레이어 1의 HP 감소
+                console.log(`player1의 데미지는 ${damage} 입니다.`);
+                resultMessage += `player1의 데미지는 ${damage} 입니다.`;
+            } else {
+                console.log(
+                    `${player1Pokemon.name}의 데미지는 ${damage} 입니다.`,
+                );
+                resultMessage += `${player1Pokemon.name}의 데미지는 ${damage} 입니다.`;
+            }
+        } else {
+            console.log("player1의 방어력이 높아 데미지가 0 입니다.");
+            resultMessage += "player1의 방어력이 높아 데미지가 0 입니다.";
         }
     }
 
     player1Pokemon.hp = player1PokemonHp.toString();
     player2Pokemon.hp = player2PokemonHp.toString();
 
-    // Update player HP display
+    // 유저 update Hp
     player1hp.innerHTML = `Player 1 HP: ${player1.hp}`;
     player2hp.innerHTML = `Player 2 HP: ${player2.hp}`;
-
-    console.log(player1Hp, player2Hp);
 
     alert(resultMessage);
 
     // HP가 0 이하인 포켓몬을 덱에서 제거
-    if (player1Pokemon <= 0) {
+    if (player1PokemonHp <= 0) {
+        console.log(player1Pokemon.name, player1PokemonHp);
         redDeck.removeCard(player1Pokemon.name);
     }
     if (player2PokemonHp <= 0) {
+        console.log(player2Pokemon.name, player2PokemonHp);
         blueDeck.removeCard(player2Pokemon.name);
     }
 
@@ -238,8 +290,8 @@ function resolveTurn() {
     player2.action = false;
 
     updateTurnDisplay();
-    document.querySelector("#player1Stat").innerText = "Please, choose action";
-    document.querySelector("#player2Stat").innerText = "Please, choose action";
+    document.querySelector("#player1Stat").innerText = "player1, 선택해라 ";
+    document.querySelector("#player2Stat").innerText = "player2, 선택해라";
     document.querySelector("#confirmTurn").style.display = "none";
 
     // 덱 UI 업데이트
@@ -256,5 +308,5 @@ function endTurn() {
 function updateTurnDisplay() {
     document.querySelector(
         "#turnDisplay",
-    ).innerText = `Turn ${currentTurn.turn}`;
+    ).innerText = `현재 턴  ${currentTurn.turn}`;
 }
